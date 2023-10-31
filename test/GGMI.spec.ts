@@ -13,7 +13,7 @@ describe("Token", () => {
 
   describe("When paused", async () => {
     it("owner should be able to call mint", async () => {
-      const { deployer, sender, receiver, tokenContract } = await loadFixture(deployContracts);
+      const { sender, tokenContract } = await loadFixture(deployContracts);
       const toMint = ethers.parseEther("1");
 
       await tokenContract.pause();
@@ -43,7 +43,7 @@ describe("Token", () => {
       expect(await tokenContract.balanceOf(receiver.address)).to.eq(toMint);
     });
     it("owner should be able to call burn", async () => {
-      const { deployer, sender, tokenContract } = await loadFixture(deployContracts);
+      const { deployer, tokenContract } = await loadFixture(deployContracts);
       const toMint = ethers.parseEther("1");
 
       await tokenContract.pause();
@@ -51,12 +51,38 @@ describe("Token", () => {
       expect(await tokenContract.burn(toMint));
       expect(await tokenContract.balanceOf(deployer.address)).to.eq(0);
     });
-    it("owner should be able to mint", async () => {
+    it("User should NOT be able to transfer", async () => {
+      const { sender, receiver, tokenContract } = await loadFixture(deployContracts);
+      const toMint = ethers.parseEther("1");
+
+      await tokenContract.pause();
+      await tokenContract.mint(sender.address, toMint);
+      await expect(tokenContract.connect(sender).transfer(receiver.address, toMint)).to.be.revertedWithCustomError(
+        tokenContract,
+        "EnforcedPause",
+      );
+    });
+    it("User should NOT be able to transferFrom", async () => {
+      const { sender, receiver, tokenContract } = await loadFixture(deployContracts);
+      const toMint = ethers.parseEther("1");
+
+      await tokenContract.mint(sender.address, toMint);
+      await tokenContract.connect(sender).approve(receiver.address, toMint);
+      await tokenContract.pause();
+      await expect(
+        tokenContract.connect(receiver).transferFrom(sender.address, receiver.address, toMint),
+      ).to.be.revertedWithCustomError(tokenContract, "EnforcedPause");
+    });
+    it("User should NOT be able to burn", async () => {
       const { deployer, sender, tokenContract } = await loadFixture(deployContracts);
       const toMint = ethers.parseEther("1");
 
       await tokenContract.pause();
       expect(await tokenContract.mint(deployer.address, toMint));
+      await expect(tokenContract.connect(sender).burn(100)).to.be.revertedWithCustomError(
+        tokenContract,
+        "EnforcedPause",
+      );
     });
   });
 });
