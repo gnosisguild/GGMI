@@ -9,12 +9,30 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
 contract GGMI is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit, ERC20Votes {
+    mapping(address => bool) public authorized;
+
+    event AuthorizationGranted(address emitter, address account);
+    event AuthorizationRevoked(address emitter, address account);
+
     constructor(
-        address initialOwner
-    ) ERC20("GG Mmembership Interests", "GGMI") Ownable(initialOwner) ERC20Permit("GG") {}
+        address initialOwner,
+        string memory _name,
+        string memory _symbol
+    ) ERC20("_name", "_symbol") Ownable(initialOwner) ERC20Permit("_symbol") {}
+
+    function grantAuthorization(address account) public onlyOwner {
+        authorized[account] = true;
+        emit AuthorizationGranted(address(this), account);
+    }
+
+    function revokeAuthorization(address account) public onlyOwner {
+        delete authorized[account];
+        emit AuthorizationRevoked(address(this), account);
+    }
 
     function _requireNotPaused() internal view override {
-        if (paused() && _msgSender() != owner()) {
+        address sender = _msgSender();
+        if (paused() && authorized[sender] != true && sender != owner()) {
             revert EnforcedPause();
         }
     }
