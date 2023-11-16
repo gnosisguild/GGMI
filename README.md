@@ -10,7 +10,7 @@
 [license]: https://opensource.org/licenses/MIT
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 [coverage]: https://coveralls.io/github/gnosisguild/GGMI?branch=main
-[coverage-badge]: https://coveralls.io/repos/github/gnosisguild/GGMI-governor/badge.svg?branch=main&cache_bust=1
+[coverage-badge]: https://coveralls.io/repos/github/gnosisguild/GGMI/badge.svg?branch=main&cache_bust=1
 
 Repo for the GG DAO LLC Membership Interest token.
 
