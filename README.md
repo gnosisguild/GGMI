@@ -16,4 +16,4 @@ Repo for the GG DAO LLC Membership Interest token.
 
 ## License
 
-This project is licensed under MIT.
+This project is licensed under LGPLv3.
