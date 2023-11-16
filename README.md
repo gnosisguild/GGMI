@@ -1,6 +1,6 @@
 # GGMI
 
-[![Github Actions][gha-badge]][gha] [![Test Coverage][coverage]][coverage-badge] [![Hardhat][hardhat-badge]][hardhat]
+[![Github Actions][gha-badge]][gha] [![Test Coverage][coverage-badge]][coverage] [![Hardhat][hardhat-badge]][hardhat]
 [![License: MIT][license-badge]][license]
 
 [gha]: https://github.com/gnosisguild/GGMI/actions
